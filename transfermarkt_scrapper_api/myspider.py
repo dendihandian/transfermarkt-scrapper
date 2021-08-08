@@ -12,3 +12,4 @@ class BlogSpider(scrapy.Spider):
             yield response.follow(next_page, self.parse)
 
 # poetry run scrapy runspider transfermarkt_scrapper_api\myspider.py
+# poetry run scrapy runspider transfermarkt_scrapper_api\myspider.py -o results/blog.json
