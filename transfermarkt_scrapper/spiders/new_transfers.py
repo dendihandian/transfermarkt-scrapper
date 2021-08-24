@@ -16,4 +16,5 @@ class NewTransfersSpider(scrapy.Spider):
         #         'name': 'Placeholder'
         #     }
 
-# poetry run scrapy crawl new_transfers -o results/new_transfers.json
+# poetry run scrapy crawl new_transfers -o datasets/new_transfers.json
+# NOTE: scraping transfermarkt site require javascript-enabled, so we will use splash
