@@ -8,6 +8,7 @@ authors = ["Dendi Handian <handian.dendi@gmail.com>"]
 python = "^3.8"
 Scrapy = "^2.5.0"
 autopep8 = "^1.5.7"
+scrapy-splash = "^0.7.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
