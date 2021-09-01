@@ -1,30 +1,25 @@
 from scrapy import Spider
 from scrapy_splash import SplashRequest
-import logging
 
 class NewTransfersSpider(Spider):
     name = 'new_transfers'
     allowed_domains = ['transfermarkt.com']
+    base_url = 'https://www.transfermarkt.com'
     script = '''
         function main(splash, args)
             splash.private_mode_enabled = false
             url = args.url
             assert(splash:go(url))
-            assert(splash:wait(1))
+            assert(splash:wait(2))
             splash:set_viewport_full()
             return splash:html()
         end
     '''
 
-    def start_requests(self, url=None):
-        if url:
-            yield SplashRequest(url=url, callback=self.parse, endpoint="execute", args={'lua_source': self.script})
-        else:
-            yield SplashRequest(url="https://www.transfermarkt.com/transfers/neuestetransfers/statistik?land_id=0&wettbewerb_id=alle&minMarktwert=500000&maxMarktwert=200000000&plus=1", callback=self.parse, endpoint="execute", args={'lua_source': self.script})
+    def start_requests(self):
+        yield SplashRequest(url="https://www.transfermarkt.com/transfers/neuestetransfers/statistik?land_id=0&wettbewerb_id=alle&minMarktwert=500000&maxMarktwert=200000000&plus=1", callback=self.parse, endpoint="execute", args={'lua_source': self.script, 'wait': 1})
 
     def parse(self, response):
-        # print(response.body)
-
         transfers = response.xpath("//table[contains(@class, 'items')][1]/tbody/tr")
         for transfer in transfers:
 
@@ -51,12 +46,9 @@ class NewTransfersSpider(Spider):
             }
 
         next_page = response.xpath("//li[contains(@class, 'naechste-seite')]/a/@href").get()
-        logging.debug('next_page:')
-        logging.info(next_page)
 
         if next_page:
-            logging.debug('masuk next page')
-            self.start_requests(url=next_page)
+            yield SplashRequest(url=self.base_url + next_page, callback=self.parse, endpoint="execute", args={'lua_source': self.script, 'wait': 1})
 
 
 """
