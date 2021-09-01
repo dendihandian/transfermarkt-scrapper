@@ -54,4 +54,5 @@ class NewTransfersSpider(Spider):
 """
 poetry run scrapy crawl new_transfers
 poetry run scrapy crawl new_transfers -o datasets/new_transfers.json
+poetry run scrapy crawl new_transfers -o datasets/new_transfers.jl
 """
