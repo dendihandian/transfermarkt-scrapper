@@ -1,3 +1,4 @@
+from dateutil.parser import parse
 from scrapy_splash import SplashRequest
 import scrapy
 
@@ -26,16 +27,19 @@ class TransfersSpider(scrapy.Spider):
             date_string = date.xpath("./td[1]/a/text()").get()
             date_link = date.xpath("./td[1]/a/@href").get()
             transfer_count = date.xpath("./td[2]/a/text()").get()
-            # print(f"{date_string} - {transfer_count}")
-            # print(f"{date_link}")
 
-            yield SplashRequest(
-                url=self.base_url + date_link, 
-                callback=self.parse_transfers_date_page,
-                cb_kwargs={'transfer_date': date_string}, 
-                endpoint="execute", 
-                args={'lua_source': self.script, 'wait': 1}
-            )
+            date_parsed = parse(date_string)
+
+            if (date_parsed > parse('2021-09-01') and int(transfer_count) > 0):
+
+                # TODO: Use the Detailed Tab
+                yield SplashRequest(
+                    url=self.base_url + date_link, 
+                    callback=self.parse_transfers_date_page,
+                    cb_kwargs={'transfer_date': date_string}, 
+                    endpoint="execute", 
+                    args={'lua_source': self.script, 'wait': 1}
+                )
 
     def parse_transfers_date_page(self, response, transfer_date):
         transfers = response.xpath("//table[@class='items']/tbody/tr")
@@ -46,9 +50,11 @@ class TransfersSpider(scrapy.Spider):
                 'transfer_date': transfer_date
             }
 
+        # TODO: Check The Next Page
+
 
 """
 poetry run scrapy crawl transfers
-poetry run scrapy crawl transfers -o datasets/transfers.json
-poetry run scrapy crawl transfers -o datasets/transfers.jl
+poetry run scrapy crawl transfers -o datasets/transfers/transfers.json
+poetry run scrapy crawl transfers -o datasets/transfers/transfers.jl
 """
