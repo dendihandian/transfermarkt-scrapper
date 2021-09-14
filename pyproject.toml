@@ -10,6 +10,7 @@ Scrapy = "^2.5.0"
 autopep8 = "^1.5.7"
 scrapy-splash = "^0.7.2"
 alembic = "^1.7.1"
+python-dateutil = "^2.8.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

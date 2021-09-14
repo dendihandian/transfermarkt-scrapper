@@ -3,4 +3,6 @@ datasets
 databases
 transfermarkt_scrapper/settings.py
 
+test.ipynb
+
 **/__pycache__
