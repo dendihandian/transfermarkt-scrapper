@@ -17,8 +17,25 @@ depends_on = None
 
 
 def upgrade():
-    pass
+    op.create_table(
+        'transfers',
+        sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
+        sa.Column('player_id', sa.String, nullable=True),
+        sa.Column('name', sa.String, nullable=False),
+        sa.Column('age', sa.String, nullable=True),
+        sa.Column('position', sa.String, nullable=True),
+        sa.Column('national_1', sa.String, nullable=True),
+        sa.Column('national_2', sa.String, nullable=True),
+        sa.Column('left_club', sa.String, nullable=True),
+        sa.Column('left_club_league', sa.String, nullable=True),
+        sa.Column('joined_club', sa.String, nullable=True),
+        sa.Column('joined_club_league', sa.String, nullable=True),
+        sa.Column('transfer_date', sa.String, nullable=False),
+        sa.Column('transfer_date_p', sa.String, nullable=True),
+        sa.Column('market_value', sa.String, nullable=True),
+        sa.Column('fee', sa.String, nullable=True),
+    )
 
 
 def downgrade():
-    pass
+    op.drop_table('new_transfers')
