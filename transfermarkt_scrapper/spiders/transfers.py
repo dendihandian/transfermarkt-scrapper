@@ -24,19 +24,18 @@ class TransfersSpider(scrapy.Spider):
     def parse_transfers_pages(self, response):
         dates = response.xpath("//table[@class='items']/tbody/tr")
         for date in dates:
-            date_string = date.xpath("./td[1]/a/text()").get()
+            transfer_date = date.xpath("./td[1]/a/text()").get()
             date_link = date.xpath("./td[1]/a/@href").get()
             transfer_count = date.xpath("./td[2]/a/text()").get()
 
-            date_parsed = parse(date_string)
+            transfer_date_parsed = parse(transfer_date)
 
-            if (date_parsed > parse('2021-09-01') and int(transfer_count) > 0):
+            if (transfer_date_parsed > parse('2021-09-13') and int(transfer_count) > 0):
 
-                # TODO: Use the Detailed Tab
                 yield SplashRequest(
-                    url=self.base_url + date_link, 
+                    url=self.base_url + date_link + '/plus/1', 
                     callback=self.parse_transfers_date_page,
-                    cb_kwargs={'transfer_date': date_string}, 
+                    cb_kwargs={'transfer_date': transfer_date}, 
                     endpoint="execute", 
                     args={'lua_source': self.script, 'wait': 1}
                 )
@@ -50,7 +49,15 @@ class TransfersSpider(scrapy.Spider):
                 'transfer_date': transfer_date
             }
 
-        # TODO: Check The Next Page
+        next_page_path = response.xpath("//li[@class='naechste-seite'][1]/a/@href").get()
+        if (next_page_path):
+            yield SplashRequest(
+                url=self.base_url + next_page_path,
+                callback=self.parse_transfers_date_page,
+                cb_kwargs={'transfer_date': transfer_date},
+                endpoint="execute",
+                args={'lua_source': self.script, 'wait': 1}
+            )
 
 
 """
