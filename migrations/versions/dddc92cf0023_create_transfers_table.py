@@ -38,4 +38,4 @@ def upgrade():
 
 
 def downgrade():
-    op.drop_table('new_transfers')
+    op.drop_table('transfers')
