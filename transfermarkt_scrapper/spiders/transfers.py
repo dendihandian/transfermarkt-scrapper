@@ -18,10 +18,17 @@ class TransfersSpider(scrapy.Spider):
         end
     '''
 
+    latest_date = '2021-09-15'
+    oldest_date = '2021-09-12'
+
     def start_requests(self):
         yield SplashRequest(url="https://www.transfermarkt.com/statistik/transfertage", callback=self.parse_transfers_pages, endpoint="execute", args={'lua_source': self.script, 'wait': 1})
 
     def parse_transfers_pages(self, response):
+
+        latest_date = parse(self.latest_date)
+        oldest_date = parse(self.oldest_date)
+
         dates = response.xpath("//table[@class='items']/tbody/tr")
         for date in dates:
             transfer_date = date.xpath("./td[1]/a/text()").get()
@@ -30,7 +37,7 @@ class TransfersSpider(scrapy.Spider):
 
             transfer_date_parsed = parse(transfer_date)
 
-            if (transfer_date_parsed > parse('2021-09-13') and int(transfer_count) > 0):
+            if (transfer_date_parsed >= oldest_date and transfer_date_parsed <= latest_date and int(transfer_count) > 0):
 
                 yield SplashRequest(
                     url=self.base_url + date_link + '/plus/1', 
