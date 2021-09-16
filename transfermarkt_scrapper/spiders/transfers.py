@@ -13,7 +13,7 @@ class TransfersSpider(scrapy.Spider):
             splash.private_mode_enabled = false
             url = args.url
             assert(splash:go(url))
-            assert(splash:wait(2))
+            assert(splash:wait(5))
             splash:set_viewport_full()
             return splash:html()
         end
@@ -42,7 +42,7 @@ class TransfersSpider(scrapy.Spider):
 
                 transfer_date_parsed = parse(transfer_date)
 
-                if (transfer_date_parsed >= oldest_date and transfer_date_parsed <= latest_date and int(transfer_count) > 0):
+                if (transfer_date_parsed >= oldest_date and transfer_date_parsed <= latest_date and int(transfer_count.replace('.', '')) > 0):
 
                     yield SplashRequest(
                         url=self.base_url + date_link + '/plus/1', 
