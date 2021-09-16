@@ -17,17 +17,8 @@ depends_on = None
 
 
 def upgrade():
-    op.create_table(
-        'new_transfers',
-        sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
-        sa.Column('player_id', sa.String),
-        sa.Column('name', sa.String),
-        sa.Column('age', sa.String),
-        sa.Column('transfer_date', sa.String),
-        sa.Column('market_value', sa.String, nullable=True),
-        sa.Column('fee', sa.String, nullable=True),
-    )
+    pass
 
 
 def downgrade():
-    op.drop_table('new_transfers')
+    pass

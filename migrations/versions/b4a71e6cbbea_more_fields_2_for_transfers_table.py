@@ -19,8 +19,12 @@ depends_on = None
 def upgrade():
     op.add_column('transfers', sa.Column('loan_fee', sa.String, nullable=True))
     op.add_column('transfers', sa.Column('loan_fee_p', sa.BigInteger, nullable=True))
+    op.add_column('transfers', sa.Column('created_at', sa.DateTime, nullable=True))
+    op.add_column('transfers', sa.Column('updated_at', sa.DateTime, nullable=True))
 
 
 def downgrade():
     op.drop_column('transfers', 'loan_fee')
     op.drop_column('transfers', 'loan_fee_p')
+    op.drop_column('transfers', 'created_at')
+    op.drop_column('transfers', 'updated_at')
