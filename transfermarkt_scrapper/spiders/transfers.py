@@ -101,7 +101,7 @@ class TransfersSpider(scrapy.Spider):
                 'market_value_p': self.parse_value(market_value),
                 'fee': fee,
                 'loan_fee': loan_fee,
-                'loan_fee': self.parse_value(loan_fee),
+                'loan_fee_p': self.parse_value(loan_fee),
                 'transfer_date': transfer_date,
                 'transfer_date_p': transfer_date_parsed,
                 'created_at': current_time,
