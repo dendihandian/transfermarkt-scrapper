@@ -7,7 +7,9 @@ Create Date: 2021-09-16 03:02:26.805502
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy.schema import Sequence, CreateSequence
 
+# transfer_id_seq = Sequence('transfers_id_seq')
 
 # revision identifiers, used by Alembic.
 revision = 'dddc92cf0023'
@@ -17,9 +19,10 @@ depends_on = None
 
 
 def upgrade():
+    # op.execute(CreateSequence(transfer_id_seq))
     op.create_table(
         'transfers',
-        sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
+        # sa.Column('id', sa.BigInteger, transfer_id_seq, primary_key=True, nullable=False, autoincrement=True, server_default=transfer_id_seq.next_value()),
         sa.Column('player_id', sa.String, nullable=True),
         sa.Column('name', sa.String, nullable=False),
         sa.Column('age', sa.String, nullable=True),
