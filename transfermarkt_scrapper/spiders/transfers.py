@@ -20,10 +20,10 @@ class TransfersSpider(scrapy.Spider):
         end
     '''
 
-    latest_date = '2021-02-01'
-    oldest_date = '2021-02-01'
-    transfer_pages_start = 11
-    transfer_pages_end = 12
+    latest_date = '2021-02-05'
+    oldest_date = '2021-02-02'
+    transfer_pages_start = 12
+    transfer_pages_end = 13
 
     def start_requests(self):
         starting_url = "https://www.transfermarkt.com/statistik/transfertage"
@@ -82,7 +82,7 @@ class TransfersSpider(scrapy.Spider):
 
         for transfer in transfers:
             player_id = transfer.xpath("./td[1]/table/tbody/tr[1]/td[2]/a[1]/@id").get()
-            name = transfer.xpath("./td[1]/table/tbody/tr[1]/td[2]/a/text()").get()
+            name = transfer.xpath("./td[1]/table/tbody/tr[1]/td[2]/tm-tooltip/a/text()").get()
             position = transfer.xpath("./td[1]/table/tbody/tr[2]/td/text()").get()
             age = transfer.xpath("./td[2]/text()").get()
             national_1 = transfer.xpath("./td[3]/img[1]/@title").get()
@@ -121,7 +121,7 @@ class TransfersSpider(scrapy.Spider):
                 'updated_at': current_time
             }
 
-        next_page_path = response.xpath("//li[@class='naechste-seite'][1]/a/@href").get()
+        next_page_path = response.xpath("//li[@class='tm-pagination__list-item tm-pagination__list-item--icon-next-page']/a/@href").get()
         if (next_page_path):
 
             logging.info('into: ' + str(next_page_path))
