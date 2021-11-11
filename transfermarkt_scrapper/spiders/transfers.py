@@ -2,6 +2,7 @@ from dateutil.parser import parse
 from scrapy_splash import SplashRequest
 from datetime import datetime
 import scrapy
+import logging
 
 
 class TransfersSpider(scrapy.Spider):
@@ -13,21 +14,30 @@ class TransfersSpider(scrapy.Spider):
             splash.private_mode_enabled = false
             url = args.url
             assert(splash:go(url))
-            assert(splash:wait(5))
+            assert(splash:wait(3))
             splash:set_viewport_full()
             return splash:html()
         end
     '''
 
-    latest_date = '2021-09-15'
-    oldest_date = '2021-09-15'
-    transfer_pages_start = 1
-    transfer_pages_end = 1
+    latest_date = '2021-02-01'
+    oldest_date = '2021-02-01'
+    transfer_pages_start = 11
+    transfer_pages_end = 12
 
     def start_requests(self):
-        yield SplashRequest(url="https://www.transfermarkt.com/statistik/transfertage", callback=self.parse_transfers_pages, endpoint="execute", args={'lua_source': self.script, 'wait': 1}, cb_kwargs={'current_page': 1})
+        starting_url = "https://www.transfermarkt.com/statistik/transfertage"
+
+        if (self.transfer_pages_start):
+            starting_url = starting_url + "?page=" + str(self.transfer_pages_start)
+
+        logging.info('starting url...')
+
+        yield SplashRequest(url=starting_url, callback=self.parse_transfers_pages, endpoint="execute", args={'lua_source': self.script, 'wait': 1}, cb_kwargs={'current_page': self.transfer_pages_start})
 
     def parse_transfers_pages(self, response, current_page):
+
+        logging.info('parse_transfers_pages: ' + str(current_page))
 
         if current_page <= self.transfer_pages_end:
 
@@ -63,6 +73,9 @@ class TransfersSpider(scrapy.Spider):
                 )
 
     def parse_transfers_date_page(self, response, transfer_date):
+
+        logging.info('parse_transfers_date_page: ' + str(transfer_date))
+
         transfer_date_parsed = parse(transfer_date).strftime('%Y-%m-%d')
         transfers = response.xpath("//table[@class='items']/tbody/tr")
         current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -110,6 +123,9 @@ class TransfersSpider(scrapy.Spider):
 
         next_page_path = response.xpath("//li[@class='naechste-seite'][1]/a/@href").get()
         if (next_page_path):
+
+            logging.info('into: ' + str(next_page_path))
+
             yield SplashRequest(
                 url=self.base_url + next_page_path,
                 callback=self.parse_transfers_date_page,
@@ -136,6 +152,9 @@ class TransfersSpider(scrapy.Spider):
 
 """
 poetry run scrapy crawl transfers
+poetry run scrapy crawl transfers --nolog
+poetry run scrapy crawl transfers --loglevel INFO
+poetry run scrapy crawl transfers --loglevel WARNING
 poetry run scrapy crawl transfers -o datasets/transfers/transfers.json
 poetry run scrapy crawl transfers -o datasets/transfers/transfers.jl
 """
