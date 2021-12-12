@@ -14,16 +14,16 @@ class TransfersSpider(scrapy.Spider):
             splash.private_mode_enabled = false
             url = args.url
             assert(splash:go(url))
-            assert(splash:wait(3))
+            assert(splash:wait(6))
             splash:set_viewport_full()
             return splash:html()
         end
     '''
 
-    latest_date = '2021-05-10'
-    oldest_date = '2021-05-01'
-    transfer_pages_start = 10
-    transfer_pages_end = 10
+    latest_date = '2021-08-08'
+    oldest_date = '2021-08-08'
+    transfer_pages_start = 6
+    transfer_pages_end = 6
 
     def start_requests(self):
         starting_url = "https://www.transfermarkt.com/statistik/transfertage"
@@ -55,10 +55,10 @@ class TransfersSpider(scrapy.Spider):
                 if (transfer_date_parsed >= oldest_date and transfer_date_parsed <= latest_date and int(transfer_count.replace('.', '')) > 0):
 
                     yield SplashRequest(
-                        url=self.base_url + date_link + '/plus/1', 
+                        url=self.base_url + date_link + '/plus/1',
                         callback=self.parse_transfers_date_page,
-                        cb_kwargs={'transfer_date': transfer_date}, 
-                        endpoint="execute", 
+                        cb_kwargs={'transfer_date': transfer_date, 'dates_page': current_page},
+                        endpoint="execute",
                         args={'lua_source': self.script, 'wait': 1}
                     )
 
@@ -72,7 +72,7 @@ class TransfersSpider(scrapy.Spider):
                     args={'lua_source': self.script, 'wait': 1}
                 )
 
-    def parse_transfers_date_page(self, response, transfer_date):
+    def parse_transfers_date_page(self, response, transfer_date, dates_page, players_page = 1):
 
         logging.info('parse_transfers_date_page: ' + str(transfer_date))
 
@@ -120,6 +120,10 @@ class TransfersSpider(scrapy.Spider):
                 'loan_fee_p': self.parse_value(loan_fee),
                 'transfer_date': transfer_date,
                 'transfer_date_p': transfer_date_parsed,
+
+                'temp_dates_page': dates_page,
+                'temp_players_page': players_page,
+
                 'created_at': current_time,
                 'updated_at': current_time
             }
@@ -132,9 +136,9 @@ class TransfersSpider(scrapy.Spider):
             yield SplashRequest(
                 url=self.base_url + next_page_path,
                 callback=self.parse_transfers_date_page,
-                cb_kwargs={'transfer_date': transfer_date},
+                cb_kwargs={'transfer_date': transfer_date, 'dates_page': dates_page, 'players_page': int(players_page) + 1},
                 endpoint="execute",
-                args={'lua_source': self.script, 'wait': 1}
+                args={'lua_source': self.script, 'wait': 6}
             )
 
     def parse_value(self, value_string):

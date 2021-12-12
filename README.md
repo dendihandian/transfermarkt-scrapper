@@ -5,7 +5,7 @@
 - Poetry Package Manager
 - Splash (running at [http://localhost:8050](http://localhost:8050))
 
-## Setup The Project
+## The Development Setup
 
 1. clone the project and go the directory by console.
 1. run `poetry install`
@@ -14,4 +14,16 @@
 1. duplicate `transfermarkt_scrapper/settings.py.backup` into `transfermarkt_scrapper/settings.py` and set the preferences in the file
 1. run `poetry run scrapy crawl transfers` to start the crawl
 
+## Alembic Common Commands
 
+### migrate to an empty or outdated database
+
+```
+poetry run alembic upgrade head
+```
+
+### create a migration/revision script
+
+```
+poetry run alembic revision -m "create account table"
+```

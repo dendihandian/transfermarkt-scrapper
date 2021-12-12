@@ -34,6 +34,9 @@ class SQLitePipeline:
         'loan_fee_p',
         'transfer_date',
         'transfer_date_p',
+        'temp_dates_page',
+        'temp_players_page',
+        'transfer_date_p',
         'created_at',
         'updated_at'
     ]
