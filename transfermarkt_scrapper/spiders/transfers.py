@@ -20,9 +20,9 @@ class TransfersSpider(scrapy.Spider):
         end
     '''
 
-    latest_date = '2021-04-30'
-    oldest_date = '2021-04-16'
-    transfer_pages_start = 9
+    latest_date = '2021-05-10'
+    oldest_date = '2021-05-01'
+    transfer_pages_start = 10
     transfer_pages_end = 10
 
     def start_requests(self):
@@ -62,7 +62,7 @@ class TransfersSpider(scrapy.Spider):
                         args={'lua_source': self.script, 'wait': 1}
                     )
 
-            next_page_path = response.xpath("//li[@class='naechste-seite'][1]/a/@href").get()
+            next_page_path = response.xpath("//li[@class='tm-pagination__list-item tm-pagination__list-item--icon-next-page'][1]/a/@href").get()
             if (next_page_path):
                 yield SplashRequest(
                     url=self.base_url + next_page_path,
