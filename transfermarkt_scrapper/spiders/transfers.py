@@ -162,6 +162,6 @@ poetry run scrapy crawl transfers
 poetry run scrapy crawl transfers --nolog
 poetry run scrapy crawl transfers --loglevel INFO
 poetry run scrapy crawl transfers --loglevel WARNING
-poetry run scrapy crawl transfers -o datasets/transfers/transfers.json
-poetry run scrapy crawl transfers -o datasets/transfers/transfers.jl
+poetry run scrapy crawl transfers -o data/transfers/transfers.json
+poetry run scrapy crawl transfers -o data/transfers/transfers.jl
 """

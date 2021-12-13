@@ -9,12 +9,12 @@
 
 1. clone the project and go the directory by console.
 1. run `poetry install`
-1. create empty `databases/transfermarkt.db` file
+1. create empty `data/transfermarkt.db` file
 1. run `poetry run alembic upgrade head`
 1. duplicate `transfermarkt_scrapper/settings.py.backup` into `transfermarkt_scrapper/settings.py` and set the preferences in the file
 1. run `poetry run scrapy crawl transfers` to start the crawl
 
-## Alembic Common Commands
+## Appendix
 
 ### migrate to an empty or outdated database
 
@@ -26,4 +26,10 @@ poetry run alembic upgrade head
 
 ```
 poetry run alembic revision -m "create account table"
+```
+
+### create a spider
+
+```
+poetry run scrapy genspider your-spider-name the-url.com
 ```

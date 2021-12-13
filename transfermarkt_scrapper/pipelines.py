@@ -42,7 +42,7 @@ class SQLitePipeline:
     ]
 
     def open_spider(self, spider):
-        self.connection = sqlite3.connect("databases/transfermarkt.db")
+        self.connection = sqlite3.connect("data/transfermarkt.db")
         self.cur = self.connection.cursor()
 
     def close_spider(self, spider):

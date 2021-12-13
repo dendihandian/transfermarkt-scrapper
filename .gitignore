@@ -1,6 +1,7 @@
 .venv
 datasets
 databases
+data
 transfermarkt_scrapper/settings.py
 
 test.ipynb
