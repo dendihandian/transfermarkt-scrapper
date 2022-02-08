@@ -33,3 +33,13 @@ poetry run alembic revision -m "create account table"
 ```
 poetry run scrapy genspider your-spider-name the-url.com
 ```
+
+### monitoring transfer counts query
+```sql
+SELECT
+	transfer_date_p,
+	COUNT(1) as count
+FROM transfers
+GROUP BY transfer_date_p
+ORDER BY transfer_date_p DESC
+```

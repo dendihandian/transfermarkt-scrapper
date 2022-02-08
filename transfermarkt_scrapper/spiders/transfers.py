@@ -20,10 +20,10 @@ class TransfersSpider(scrapy.Spider):
         end
     '''
 
-    latest_date = '2021-08-08'
-    oldest_date = '2021-08-08'
-    transfer_pages_start = 6
-    transfer_pages_end = 6
+    latest_date = '2021-12-31'
+    oldest_date = '2021-12-21'
+    transfer_pages_start = 1
+    transfer_pages_end = 5
 
     def start_requests(self):
         starting_url = "https://www.transfermarkt.com/statistik/transfertage"
@@ -59,7 +59,7 @@ class TransfersSpider(scrapy.Spider):
                         callback=self.parse_transfers_date_page,
                         cb_kwargs={'transfer_date': transfer_date, 'dates_page': current_page},
                         endpoint="execute",
-                        args={'lua_source': self.script, 'wait': 1}
+                        args={'lua_source': self.script, 'wait': 2}
                     )
 
             next_page_path = response.xpath("//li[@class='tm-pagination__list-item tm-pagination__list-item--icon-next-page'][1]/a/@href").get()
@@ -69,12 +69,12 @@ class TransfersSpider(scrapy.Spider):
                     callback=self.parse_transfers_pages,
                     cb_kwargs={'current_page': current_page+1},
                     endpoint="execute",
-                    args={'lua_source': self.script, 'wait': 1}
+                    args={'lua_source': self.script, 'wait': 2}
                 )
 
     def parse_transfers_date_page(self, response, transfer_date, dates_page, players_page = 1):
 
-        logging.info('parse_transfers_date_page: ' + str(transfer_date))
+        logging.warning('parse_transfers_date_page: ' + str(transfer_date))
 
         transfer_date_parsed = parse(transfer_date).strftime('%Y-%m-%d')
         transfers = response.xpath("//table[@class='items']/tbody/tr")
@@ -138,7 +138,7 @@ class TransfersSpider(scrapy.Spider):
                 callback=self.parse_transfers_date_page,
                 cb_kwargs={'transfer_date': transfer_date, 'dates_page': dates_page, 'players_page': int(players_page) + 1},
                 endpoint="execute",
-                args={'lua_source': self.script, 'wait': 6}
+                args={'lua_source': self.script, 'wait': 3}
             )
 
     def parse_value(self, value_string):

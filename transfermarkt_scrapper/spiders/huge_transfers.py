@@ -20,10 +20,10 @@ class HugeTransfersSpider(scrapy.Spider):
         end
     '''
 
-    transfer_date = '2021-07-01'
-    transfer_date_display = 'Jul 1, 2021'
-    page_start = 21
-    page_end = 100
+    transfer_date = '2021-08-31'
+    transfer_date_display = 'Aug 31, 2021'
+    page_start = 51
+    page_end = 80
 
 
     def start_requests(self):
