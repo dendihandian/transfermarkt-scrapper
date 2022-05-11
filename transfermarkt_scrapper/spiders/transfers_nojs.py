@@ -9,10 +9,10 @@ class TransfersNojsSpider(scrapy.Spider):
     allowed_domains = ['transfermarkt.com']
     base_url = 'https://www.transfermarkt.com'
 
-    latest_date = '2022-05-08'
-    oldest_date = '2022-05-08'
+    latest_date = '2022-03-31'
+    oldest_date = '2022-03-01'
     transfer_pages_start = 1
-    transfer_pages_end = 2
+    transfer_pages_end = 10
 
     def start_requests(self):
         starting_url = "https://www.transfermarkt.com/statistik/transfertage"

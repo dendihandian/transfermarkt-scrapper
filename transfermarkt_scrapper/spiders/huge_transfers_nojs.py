@@ -9,10 +9,10 @@ class HugeTransfersNojsSpider(scrapy.Spider):
     allowed_domains = ['transfermarkt.com']
     base_url = 'https://www.transfermarkt.com'
 
-    transfer_date = '2022-01-01'
-    transfer_date_display = 'Jan 1, 2022'
-    page_start = 101
-    page_end = 150
+    transfer_date = '2022-02-01'
+    transfer_date_display = 'Feb 1, 2022'
+    page_start = 1
+    page_end = 100
 
 
     def start_requests(self):
